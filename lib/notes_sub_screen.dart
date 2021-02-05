@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:notes_application/pallete.dart';
+import 'libraries.dart';
 
 String title, text;
 Color color;

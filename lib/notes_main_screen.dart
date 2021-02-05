@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:notes_application/notes_sub_screen.dart';
-import 'package:notes_application/pallete.dart';
+import 'libraries.dart';
 
 class NotesMainScreen extends StatefulWidget {
   @override
@@ -14,7 +11,6 @@ int tempIndex;
 List<String> notesHeading = [];
 List<String> notes = [];
 String noteTemp = ' ';
-List<Color> colorList = [];
 
 ScrollController _scrollController;
 _scrollListener() {
@@ -32,7 +28,6 @@ class _NotesMainScreenState extends State<NotesMainScreen> {
     super.initState();
   }
 
-  int c = 0;
   @override
   Widget build(BuildContext context) {
     void toEnd() {
@@ -68,19 +63,19 @@ class _NotesMainScreenState extends State<NotesMainScreen> {
               style: TextStyle(color: Colors.white),
             ),
             content: SingleChildScrollView(
-              // child: ColorPicker(
-              //   labelTextStyle: TextStyle(color: Colors.white),
-              //   pickerColor: pickerColor,
-              //   onColorChanged: changeColor,
-              //   showLabel: false,
-              //   pickerAreaHeightPercent: 0.8,
-              // ),
-              // Use Material color picker:
-              //
-              child: MaterialPicker(
+              child: ColorPicker(
+                labelTextStyle: TextStyle(color: Colors.white),
                 pickerColor: pickerColor,
                 onColorChanged: changeColor,
+                showLabel: false,
+                pickerAreaHeightPercent: 0.8,
               ),
+              // Use Material color picker:
+              //
+              // child: MaterialPicker(
+              //   pickerColor: pickerColor,
+              //   onColorChanged: changeColor,
+              // ),
               //
               // Use Block color picker:
               //
@@ -276,147 +271,20 @@ class _NotesMainScreenState extends State<NotesMainScreen> {
             SizedBox(
               height: _height * 0.05,
             ),
-            Container(
-              margin: EdgeInsets.only(left: 5, right: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Notes',
-                    style: TextStyle(fontSize: 37, color: Colors.white),
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: pickerColor),
-                          child: GestureDetector(
-                            child: Icon(
-                              Icons.color_lens_outlined,
-                              color: Colors.white,
-                              size: _width * 0.08,
-                            ),
-                            onTap: () {
-                              _showColorPickerDialog();
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: _width * 0.02,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: searchIconBackgroundColor),
-                          child: GestureDetector(
-                            child: Icon(
-                              Icons.search_rounded,
-                              color: Colors.white,
-                              size: _width * 0.08,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            buildHeadingRow(
+              pickerColor,
+              _width,
+              _showColorPickerDialog,
+              currentColor,
             ),
-            Expanded(
-              child: GridView.count(
-                controller: _scrollController,
-                crossAxisCount: 2,
-                mainAxisSpacing: 5.0,
-                children: List.generate(listViewCount, (index) {
-                  return Container(
-                    child: Center(
-                        child: GestureDetector(
-                      onTap: () {
-                        tempIndex = index;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NotesSubScreen(
-                                notesHeading[index],
-                                notes[index],
-                                colorList[index]),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        height: _height / 4,
-                        margin: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: colorList[index],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Container(
-                            child: Column(
-                              children: [
-                                SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.all(8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              child: Center(
-                                                child: Text(
-                                                  notesHeading[index],
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 22,
-                                                      decorationColor:
-                                                          Colors.black),
-                                                  overflow: TextOverflow.clip,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.all(5),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    notes[index],
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 17,
-                                                    ),
-                                                    overflow: TextOverflow.clip,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )),
-                  );
-                }),
-              ),
+            buildGridView(
+              context,
+              _scrollController,
+              listViewCount,
+              tempIndex,
+              notesHeading,
+              notes,
+              _height,
             ),
           ],
         ),

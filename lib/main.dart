@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:notes_application/notes_main_screen.dart';
+import 'libraries.dart';
 
 void main() {
   runApp(MyApp());
